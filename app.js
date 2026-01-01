@@ -10,9 +10,9 @@ const END_EPOCH = Date.parse("2027-01-01T00:00:00+05:30");
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const TOTAL_DAYS = 365;
 
-// DEBUG MODE: Set to false for Production
-const IS_DEBUG = true;
-const DEBUG_NOW_ISO = "2026-03-09T12:00:00+05:30"; // March 9th
+// Debug Mode (set to true for testing with a specific date)
+const IS_DEBUG = false;
+const DEBUG_NOW_ISO = "2026-06-15T12:00:00+05:30";
 
 // DOM Elements
 const elHoursLeft = document.getElementById('hours-left');
@@ -164,8 +164,7 @@ function generateBitmaskGrid() {
         });
     });
 
-    // Validate
-    console.log("Grid Count:", candidates.length, "Target: 365");
+    // Safety check: ensure exactly 365 particles
     if (candidates.length > 365) {
         candidates.length = 365;
     }
@@ -265,14 +264,15 @@ function update() {
         el.classList.remove('filled', 'current');
 
         if (pt.dayIndex < data.elapsedDays) {
-            // Past days are filled
+            // Past days: filled with day number
             el.classList.add('filled');
             el.textContent = pt.dayIndex + 1;
         } else if (pt.dayIndex === data.elapsedDays) {
-            // Current day gets fire emoji
-            el.classList.add('filled', 'current');
+            // Current day: filled with fire emoji
+            el.classList.add('filled', 'current-day-fire');
             el.textContent = '🔥';
         } else {
+            // Future days: just day number
             el.textContent = pt.dayIndex + 1;
         }
     });
