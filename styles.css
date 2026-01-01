@@ -63,7 +63,7 @@ main {
 #year-container {
     position: relative;
     width: 100%;
-    max-width: 800px;
+    max-width: 1100px;
     aspect-ratio: 4/1;
     /* 80x20 = 4:1 */
     margin-bottom: 3rem;

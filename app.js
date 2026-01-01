@@ -12,7 +12,7 @@ const TOTAL_DAYS = 365;
 
 // Debug Mode (set to true for testing with a specific date)
 const IS_DEBUG = false;
-const DEBUG_NOW_ISO = "2026-06-15T12:00:00+05:30";
+const DEBUG_NOW_ISO = "2026-03-09T12:00:00+05:30";
 
 // DOM Elements
 const elHoursLeft = document.getElementById('hours-left');
@@ -261,15 +261,15 @@ function update() {
     // For March 9, elapsedDays = 67 (Jan has 31, Feb has 28, + 8 days = 67)
     particles.forEach((pt) => {
         const el = pt.element;
-        el.classList.remove('filled', 'current');
+        el.classList.remove('filled', 'current', 'current-day-fire');
 
         if (pt.dayIndex < data.elapsedDays) {
             // Past days: filled with day number
             el.classList.add('filled');
             el.textContent = pt.dayIndex + 1;
         } else if (pt.dayIndex === data.elapsedDays) {
-            // Current day: filled with fire emoji
-            el.classList.add('filled', 'current-day-fire');
+            // Current day: fire emoji
+            el.classList.add('current-day-fire');
             el.textContent = '🔥';
         } else {
             // Future days: just day number
