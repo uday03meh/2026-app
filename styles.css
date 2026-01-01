@@ -1,0 +1,382 @@
+:root {
+    --bg-color: #050505;
+    --text-primary: #ffffff;
+    --text-secondary: #888888;
+    --accent-color: #00ff41;
+    /* Terminal Green */
+    --accent-glow: rgba(0, 255, 65, 0.4);
+    --grid-empty: #1a1a1a;
+    --grid-border: #222;
+    --font-main: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    padding: 2rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+main {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+}
+
+/* Hero Section */
+#hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Year Container (Holds particles) */
+#year-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    aspect-ratio: 4/1;
+    /* 80x20 = 4:1 */
+    margin-bottom: 3rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.day-particle {
+    position: absolute;
+    /* Size set by JS based on grid dimensions */
+    background-color: var(--grid-empty);
+    border-radius: 1px;
+
+    transform: translate(-50%, -50%);
+    /* Centered */
+    transition: background-color 0.2s steps(1);
+
+    /* Text inside pixels */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Dynamic font size: 80 cols fit in 100vw. So 1 col ~ 1.2vw. Text needs to fit inside. */
+    /* User requested smaller size */
+    font-size: 0.45vw;
+    line-height: 1;
+    font-family: var(--font-mono);
+
+    /* Solid color for visibility */
+    color: #444;
+    /* Dim grey for empty squares so they don't overpower the shape */
+
+    overflow: hidden;
+    user-select: none;
+    cursor: default;
+}
+
+.day-particle.filled {
+    background-color: var(--accent-color);
+    box-shadow: 0 0 2px var(--accent-glow);
+    /* Contrast text */
+    color: #000;
+    font-weight: bold;
+}
+
+/* On mobile, text is inevitably too small, but we try */
+@media (max-width: 600px) {
+    .day-particle {
+        /* On 400px screen, 0.7vw is 2.8px. It will just look like texture. */
+        color: rgba(255, 255, 255, 0.2);
+    }
+
+    .day-particle:hover {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Show ONLY if filled? */
+    .day-particle.filled {
+        color: rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Optimize rendering */
+.day-particle {
+    will-change: background-color;
+}
+
+/* CRT Scanline Effect */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0) 50%,
+            rgba(0, 0, 0, 0.1) 50%,
+            rgba(0, 0, 0, 0.1));
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.6;
+}
+
+/* Animations */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 2px var(--accent-glow);
+        opacity: 0.9;
+    }
+
+    50% {
+        box-shadow: 0 0 6px var(--accent-glow);
+        opacity: 1;
+    }
+
+    100% {
+        box-shadow: 0 0 2px var(--accent-glow);
+        opacity: 0.9;
+    }
+}
+
+@keyframes flow {
+
+    0%,
+    100% {
+        background-color: var(--accent-color);
+        box-shadow: 0 0 2px var(--accent-glow);
+    }
+
+    50% {
+        background-color: #55ff88;
+        /* Brighter flash */
+        box-shadow: 0 0 8px var(--accent-glow);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.day-particle.filled {
+    /* "Water Flow" / Data Ripple Effect */
+    /* Continuous wave moving left to right */
+    background-color: var(--accent-color) !important;
+    box-shadow: 0 0 4px var(--accent-glow);
+    animation: flow 4s infinite ease-in-out;
+    /* Offset phase by column to create wave motion */
+    animation-delay: calc(var(--col) * 0.1s);
+}
+
+/* Current day - Fire emoji with animated glow and flicker */
+/* Current day - Fire emoji with animated glow and flicker */
+.day-particle.current {
+    background-color: #ff6600 !important;
+    box-shadow: 0 0 6px #ff6600, 0 0 10px #ff3300;
+    animation: fireFlicker 1.5s infinite ease-in-out;
+    font-size: 0.65vw;
+    z-index: 100;
+    transform-origin: center center;
+    border-radius: 2px;
+}
+
+@keyframes fireFlicker {
+
+    0%,
+    100% {
+        transform: scale(1);
+        /* No translate, just scale */
+        box-shadow: 0 0 6px #ff6600, 0 0 10px #ff3300;
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.15);
+        /* Pulse size */
+        box-shadow: 0 0 12px #ff8800, 0 0 16px #ff4400;
+        opacity: 0.9;
+    }
+}
+
+/* Counters */
+#counters {
+    display: flex;
+    gap: 4rem;
+    text-align: center;
+    justify-content: center;
+    /* Center them */
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    /* Add breathing room at bottom */
+}
+
+/* ... existing ... */
+
+.counter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.loader-wrapper {
+    position: relative;
+    width: 140px;
+    /* Slightly larger for pixel ring */
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pixel Ring Particles */
+.loader-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: var(--grid-empty);
+    border-radius: 1px;
+    transition: background-color 0.1s steps(1);
+    will-change: background-color;
+}
+
+.loader-particle.filled {
+    background-color: var(--accent-color);
+    box-shadow: 0 0 4px var(--accent-glow);
+}
+
+/* Blinking edge dot (progress tip) */
+.loader-particle.edge {
+    animation: blink 0.5s infinite ease-in-out;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    50% {
+        opacity: 0.4;
+        box-shadow: 0 0 2px var(--accent-glow);
+    }
+}
+
+.counter-val {
+    position: relative;
+    z-index: 2;
+    font-family: 'VT323', monospace;
+    /* Pixel font */
+    /* Adjust size to fit in circle */
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: var(--accent-color);
+    /* Green per request */
+    line-height: 1;
+    text-shadow: 0 0 5px var(--accent-glow);
+}
+
+.counter-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    main {
+        gap: 2rem;
+        padding: 1rem;
+    }
+
+    #counters {
+        gap: 1.5rem;
+        /* Tighter gap */
+        flex-direction: row;
+        /* Try to keep side-by-side if fits, or wrap */
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* Ensure loaders don't overflow */
+    .loader-wrapper {
+        width: 110px;
+        /* Smaller */
+        height: 110px;
+        /* No transform scale, just resize */
+    }
+
+    .counter-val {
+        font-size: 2rem;
+        /* Smaller text */
+    }
+
+    /* Mobile: Maximize width but keep margins */
+    #year-container {
+        max-width: none;
+        width: 92vw;
+        /* Let JS set aspect ratio, but we can enforce it not being overridden */
+    }
+
+    /* Ensure squares stay squares by letting container height grow?
+       JS sets aspect-ratio, so height will calculate automatically from width.
+       The issue might be padding/margins pushing it?
+       Just ensure no max-height constraints. */
+}
+
+/* Extra small screens check */
+@media (max-width: 440px) {
+    .loader-wrapper {
+        width: 90px;
+        height: 90px;
+    }
+
+    .counter-val {
+        font-size: 1.5rem;
+    }
+
+    #counters {
+        gap: 0.5rem;
+    }
+}
