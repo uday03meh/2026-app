@@ -296,7 +296,9 @@ main {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+
+/* Medium screens: 2 items on top, 1 on bottom - make percent bigger */
+@media (max-width: 768px) and (min-width: 361px) {
     main {
         gap: 2rem;
         padding: 1rem;
@@ -304,59 +306,72 @@ main {
 
     #counters {
         gap: 1.5rem;
-        /* Tighter gap */
         flex-direction: row;
-        /* Try to keep side-by-side if fits, or wrap */
         flex-wrap: wrap;
         justify-content: center;
         width: 100%;
     }
 
-    /* Ensure loaders don't overflow */
     .loader-wrapper {
-        width: 110px;
-        /* Smaller */
-        height: 110px;
-        /* No transform scale, just resize */
+        width: 100px;
+        height: 100px;
     }
 
     .counter-val {
-        font-size: 2rem;
-        /* Smaller text */
+        font-size: 1.8rem;
+    }
+
+    .counter-label {
+        font-size: 0.65rem;
     }
 
     /* Mobile: Maximize width but keep margins */
     #year-container {
         max-width: none;
         width: 92vw;
-        /* Let JS set aspect ratio, but we can enforce it not being overridden */
     }
 
     /* Make percent counter larger when alone on second row */
     .counter-item:nth-child(3) .loader-wrapper {
-        width: 130px;
-        height: 130px;
+        width: 120px;
+        height: 120px;
     }
 
     .counter-item:nth-child(3) .counter-val {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
-
-    /* Ensure squares stay squares by letting container height grow?
-       JS sets aspect-ratio, so height will calculate automatically from width.
-       The issue might be padding/margins pushing it?
-       Just ensure no max-height constraints. */
 }
 
-/* Extra small screens check */
-@media (max-width: 440px) {
+/* Small screens: vertical stack - all same size */
+@media (max-width: 360px) {
+    main {
+        gap: 1.5rem;
+        padding: 0.5rem;
+    }
+
+    #counters {
+        gap: 1rem;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
     .loader-wrapper {
-        width: 90px;
-        height: 90px;
+        width: 100px;
+        height: 100px;
     }
 
     .counter-val {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+    }
+
+    .counter-label {
+        font-size: 0.6rem;
+    }
+
+    #year-container {
+        max-width: none;
+        width: 95vw;
     }
 }
 
