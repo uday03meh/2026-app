@@ -16,14 +16,17 @@ const DEBUG_NOW_ISO = "2026-03-09T12:00:00+05:30";
 
 // DOM Elements
 const elDaysLeft = document.getElementById('days-left');
+const elHoursLeft = document.getElementById('hours-left');
 const elPercentLeft = document.getElementById('percent-left');
 const elYearContainer = document.getElementById('year-container');
 const elLoaderDays = document.getElementById('loader-days');
+const elLoaderHours = document.getElementById('loader-hours');
 const elLoaderPercent = document.getElementById('loader-percent');
 
 // State
 let particles = [];
 let dotsDays = [];
+let dotsHours = [];
 let dotsPercent = [];
 
 // ============ BITMASKS (365 total: 91+92+91+91) ============
@@ -107,6 +110,7 @@ const DIGITS = [TWO_91, ZERO_92, TWO_91, SIX_91];
 function init() {
     generateBitmaskGrid();
     dotsDays = createPixelRing(elLoaderDays, 40);
+    dotsHours = createPixelRing(elLoaderHours, 40);
     dotsPercent = createPixelRing(elLoaderPercent, 40);
     update();
     setInterval(update, 1000);
@@ -213,9 +217,12 @@ function calculateProgress() {
     const daysLeft = TOTAL_DAYS - Math.floor(elapsedMs / MS_PER_DAY);
     const displayDaysLeft = Math.max(0, Math.min(TOTAL_DAYS, daysLeft));
 
+    const hoursLeft = (END_EPOCH - now) / (1000 * 60 * 60);
+    const displayHoursLeft = Math.max(0, Math.floor(hoursLeft));
+
     const elapsedDays = Math.max(0, Math.floor(elapsedMs / MS_PER_DAY));
 
-    return { percentLeft, displayDaysLeft, elapsedDays };
+    return { percentLeft, displayDaysLeft, displayHoursLeft, elapsedDays };
 }
 
 function update() {
@@ -223,6 +230,10 @@ function update() {
 
     if (elDaysLeft) {
         elDaysLeft.textContent = data.displayDaysLeft;
+    }
+
+    if (elHoursLeft) {
+        elHoursLeft.textContent = data.displayHoursLeft.toLocaleString();
     }
 
     if (elPercentLeft) {
@@ -247,6 +258,19 @@ function update() {
         const dRatio = Math.min(1, Math.max(0, data.displayDaysLeft / TOTAL_DAYS));
         const countToFill = Math.floor(dRatio * dotsDays.length);
         dotsDays.forEach((d, i) => {
+            d.classList.remove('filled', 'edge');
+            if (i < countToFill) {
+                d.classList.add('filled');
+                if (i === countToFill - 1) d.classList.add('edge');
+            }
+        });
+    }
+
+    if (dotsHours && dotsHours.length > 0) {
+        const MAX_HOURS = 8760;
+        const hRatio = Math.min(1, Math.max(0, data.displayHoursLeft / MAX_HOURS));
+        const countToFill = Math.floor(hRatio * dotsHours.length);
+        dotsHours.forEach((d, i) => {
             d.classList.remove('filled', 'edge');
             if (i < countToFill) {
                 d.classList.add('filled');
