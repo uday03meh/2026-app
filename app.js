@@ -217,8 +217,10 @@ function calculateProgress() {
     const daysLeft = TOTAL_DAYS - Math.floor(elapsedMs / MS_PER_DAY);
     const displayDaysLeft = Math.max(0, Math.min(TOTAL_DAYS, daysLeft));
 
-    const hoursLeft = (END_EPOCH - now) / (1000 * 60 * 60);
-    const displayHoursLeft = Math.max(0, Math.floor(hoursLeft));
+    // Hours left in the current day (0-24)
+    const msIntoToday = elapsedMs % MS_PER_DAY;
+    const hoursLeftToday = 24 - (msIntoToday / (1000 * 60 * 60));
+    const displayHoursLeft = Math.max(0, Math.floor(hoursLeftToday));
 
     const elapsedDays = Math.max(0, Math.floor(elapsedMs / MS_PER_DAY));
 
@@ -267,8 +269,7 @@ function update() {
     }
 
     if (dotsHours && dotsHours.length > 0) {
-        const MAX_HOURS = 8760;
-        const hRatio = Math.min(1, Math.max(0, data.displayHoursLeft / MAX_HOURS));
+        const hRatio = Math.min(1, Math.max(0, data.displayHoursLeft / 24));
         const countToFill = Math.floor(hRatio * dotsHours.length);
         dotsHours.forEach((d, i) => {
             d.classList.remove('filled', 'edge');

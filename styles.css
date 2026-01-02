@@ -332,6 +332,16 @@ main {
         /* Let JS set aspect ratio, but we can enforce it not being overridden */
     }
 
+    /* Make percent counter larger when alone on second row */
+    .counter-item:nth-child(3) .loader-wrapper {
+        width: 130px;
+        height: 130px;
+    }
+
+    .counter-item:nth-child(3) .counter-val {
+        font-size: 2.2rem;
+    }
+
     /* Ensure squares stay squares by letting container height grow?
        JS sets aspect-ratio, so height will calculate automatically from width.
        The issue might be padding/margins pushing it?
