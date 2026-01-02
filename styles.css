@@ -26,8 +26,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
     padding: 1rem;
 }
 
@@ -300,12 +299,12 @@ main {
 /* Medium screens: 2 items on top, 1 on bottom - make percent bigger */
 @media (max-width: 768px) and (min-width: 361px) {
     main {
-        gap: 2rem;
-        padding: 1rem;
+        gap: 1.5rem;
+        padding: 0.5rem;
     }
 
     #counters {
-        gap: 1.5rem;
+        gap: 1rem;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
@@ -333,8 +332,8 @@ main {
 
     /* Make percent counter larger when alone on second row */
     .counter-item:nth-child(3) .loader-wrapper {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
     }
 
     .counter-item:nth-child(3) .counter-val {
@@ -344,25 +343,35 @@ main {
 
 /* Small screens: vertical stack - all same size */
 @media (max-width: 360px) {
+    body {
+        padding: 0.5rem;
+    }
+
     main {
-        gap: 1.5rem;
+        gap: 1rem;
         padding: 0.5rem;
     }
 
     #counters {
-        gap: 1rem;
+        gap: 0.5rem;
         flex-direction: column;
         align-items: center;
         width: 100%;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .counter-item {
+        gap: 0.25rem;
     }
 
     .loader-wrapper {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
     }
 
     .counter-val {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
 
     .counter-label {
@@ -372,6 +381,7 @@ main {
     #year-container {
         max-width: none;
         width: 95vw;
+        margin-bottom: 0.5rem;
     }
 }
 
@@ -402,8 +412,8 @@ main {
 footer {
     width: 100%;
     text-align: center;
-    padding: 1rem;
-    margin-top: 1rem;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
     color: var(--text-secondary);
     font-size: 0.8rem;
 }
