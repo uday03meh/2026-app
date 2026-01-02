@@ -26,9 +26,9 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    /* Prevent any scrollbars */
-    padding: 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
 }
 
 .visually-hidden {
@@ -48,7 +48,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4rem;
+    gap: 2rem;
 }
 
 /* Hero Section */
@@ -66,7 +66,7 @@ main {
     max-width: 1100px;
     aspect-ratio: 4/1;
     /* 80x20 = 4:1 */
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
 
     display: flex;
     align-items: center;
@@ -215,8 +215,8 @@ main {
     text-align: center;
     justify-content: center;
     /* Center them */
-    margin-top: 1rem;
-    margin-bottom: 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
     /* Add breathing room at bottom */
 }
 
@@ -402,8 +402,8 @@ main {
 footer {
     width: 100%;
     text-align: center;
-    padding: 2rem;
-    margin-top: 2rem;
+    padding: 1rem;
+    margin-top: 1rem;
     color: var(--text-secondary);
     font-size: 0.8rem;
 }
